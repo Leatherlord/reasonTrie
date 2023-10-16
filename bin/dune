@@ -1,0 +1,6 @@
+(executable
+ (public_name app)
+ (name main)
+ (libraries reasonTrie reUtils)
+ (flags
+  (:standard -w +A)))

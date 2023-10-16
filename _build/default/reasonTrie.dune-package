@@ -1,0 +1,4 @@
+(lang dune 3.10)
+(name reasonTrie)
+(sections (lib .) (bin ../../bin) (doc ../../doc/reasonTrie))
+(files (lib (META dune-package opam)) (bin (app)) (doc (LICENSE README.md)))

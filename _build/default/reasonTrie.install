@@ -1,0 +1,12 @@
+lib: [
+  "_build/install/default/lib/reasonTrie/META"
+  "_build/install/default/lib/reasonTrie/dune-package"
+  "_build/install/default/lib/reasonTrie/opam"
+]
+bin: [
+  "_build/install/default/bin/app"
+]
+doc: [
+  "_build/install/default/doc/reasonTrie/LICENSE"
+  "_build/install/default/doc/reasonTrie/README.md"
+]

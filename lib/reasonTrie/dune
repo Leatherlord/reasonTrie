@@ -1,0 +1,5 @@
+(library
+ (name reasonTrie)
+ (flags
+  (:standard -w +A))
+ (libraries reUtils reString reList))

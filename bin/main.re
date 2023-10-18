@@ -1,46 +1,49 @@
 // open ReUtils;
 
+let combineInts = (first, second) => first * second;
+
 let newTrie = ReasonTrie.create();
 
 let str = "Hello!";
 let vl = 10;
 let lst = List.init(String.length(str), String.get(str));
 
-let newTrie = ReasonTrie.set(newTrie, lst, vl);
+let newTrie = ReasonTrie.set(Char.compare, newTrie, lst, vl);
 
 let str = "Hell";
 let vl = 100;
 let lst = List.init(String.length(str), String.get(str));
 
-let newTrie = ReasonTrie.set(newTrie, lst, vl);
+let newTrie = ReasonTrie.set(Char.compare, newTrie, lst, vl);
 
 let str = "Helicopter";
 let vl = 228;
 let lst = List.init(String.length(str), String.get(str));
 
-let newTrie = ReasonTrie.set(newTrie, lst, vl);
+let newTrie = ReasonTrie.set(Char.compare, newTrie, lst, vl);
 
+let newTrie2 = ReasonTrie.create();
 let str = "SHell";
 let vl = 100;
 let lst = List.init(String.length(str), String.get(str));
 
-let newTrie = ReasonTrie.set(newTrie, lst, vl);
+let newTrie2 = ReasonTrie.set(Char.compare, newTrie2, lst, vl);
 
 let str = "Helios";
 let vl = 100;
 let lst = List.init(String.length(str), String.get(str));
 
-let newTrie = ReasonTrie.set(newTrie, lst, vl);
+let newTrie2 = ReasonTrie.set(Char.compare, newTrie2, lst, vl);
 
-// let isPresent = ReasonTrie.exists(newTrie, lst);
+let newTrie =
+  ReasonTrie.combine(Char.compare, combineInts, newTrie, newTrie2);
 
-// if (isPresent) {
-//   let value = ReasonTrie.find(newTrie, lst);
-//   print_string("Result is: ");
-//   print_int(value);
-//   print_newline();
-// } else {
-//   printEndline("Not working! :(");
-// };
-
-ReasonTrie.print(0, Char.escaped, Int.to_string, newTrie);
+ReasonTrie.print(
+  0,
+  Char.escaped,
+  ReInt.toString,
+  ReasonTrie.sub(
+    newTrie,
+    List.init(String.length("He"), String.get("He")),
+  ),
+);

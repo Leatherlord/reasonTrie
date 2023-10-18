@@ -1,6 +1,6 @@
 (executable
  (public_name app)
  (name main)
- (libraries reasonTrie reUtils)
+ (libraries reasonTrie reUtils reInt)
  (flags
   (:standard -w +A)))

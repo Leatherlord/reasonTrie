@@ -2,4 +2,4 @@
  (name reasonTrie)
  (flags
   (:standard -w +A))
- (libraries reUtils reString reList))
+ (libraries reUtils reString reList reInt))

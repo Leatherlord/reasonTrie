@@ -23,12 +23,39 @@ module Node = {
 
 type t('a, 'b) = list(Node.t('a, 'b));
 
-let existsOnNode = (nodes, key) =>
+let rec print =
+        (
+          indent: int,
+          aToString: 'a => string,
+          bToString: 'b => string,
+          tree: t('a, 'b),
+        ) => {
+  switch (tree) {
+  | [] => ()
+  | [h, ...t] =>
+    let spaces = String.make(indent, ':');
+    printString(spaces);
+    printString("(");
+    printString(aToString(h.Node.key));
+    printString(":");
+    switch (h.Node.value) {
+    | None => printString("_")
+    | Some(value) => printString(bToString(value))
+    };
+    printString(")");
+    printEndline("->");
+    print(indent + 1, aToString, bToString, h.Node.children);
+    print(indent, aToString, bToString, t);
+  };
+};
+
+let isKeyInNodes = (nodes, key) =>
   List.exists(n => n.Node.key == key, nodes);
 
-let findOnNode = (nodes, key) => List.find(n => n.Node.key == key, nodes);
+let findByKeyInNodes = (nodes, key) =>
+  List.find(n => n.Node.key == key, nodes);
 
-let replaceNode = (nodes, key, node) => {
+let replaceNodeByKey = (nodes, key, node) => {
   let rec aux =
     fun
     | [] => []
@@ -38,7 +65,7 @@ let replaceNode = (nodes, key, node) => {
   aux(nodes);
 };
 
-let removeNode = (nodes, key) => {
+let removeNodeByKey = (nodes, key) => {
   let rec aux =
     fun
     | [] => raise(NotFound)
@@ -74,102 +101,133 @@ let rec fold = (f, tree, acc) => {
   ReList.foldLeft(aux, acc, tree);
 };
 
-let rec subOnNode = tree =>
+let rec getParentOfSub = tree =>
   fun
-  | [] => raise(Not_found)
-  | [h, ...t] when existsOnNode(tree, h) => {
-      let node = findOnNode(tree, h);
+  | [] => raise(NotFound)
+  | [h, ...t] when isKeyInNodes(tree, h) => {
+      let node = findByKeyInNodes(tree, h);
       if (t == []) {
         node;
       } else {
-        subOnNode(node.Node.children, t);
+        getParentOfSub(node.Node.children, t);
       };
     }
-  | [_, ..._] => raise(NotFound);
+  | _ => raise(NotFound);
 
 let sub = (tree, path) =>
-  try(subOnNode(tree, path).Node.children) {
+  try(getParentOfSub(tree, path).Node.children) {
   | NotFound => []
   };
 
-let find = (tree, path) => Node.getValue(subOnNode(tree, path));
+let find = (tree, path) => Node.getValue(getParentOfSub(tree, path));
 
 let rec exists = tree =>
   fun
   | [] => false
-  | [h, ...t] when existsOnNode(tree, h) => {
-      let node = findOnNode(tree, h);
+  | [h, ...t] when isKeyInNodes(tree, h) => {
+      let node = findByKeyInNodes(tree, h);
       if (t == []) {
         node.Node.value != None;
       } else {
         exists(node.Node.children, t);
       };
     }
-  | [_, ..._] => false;
+  | _ => false;
 
-let rec setOnNode = (node, path, value) =>
+let rec setOnNode = (compareKeys, node, path, value) =>
   if (path == []) {
     Node.setValue(node, value);
   } else {
-    let children = set(node.Node.children, path, value);
+    let children = set(compareKeys, node.Node.children, path, value);
     Node.setChildren(node, children);
   }
-and set = (tree, path, value) =>
+and set = (compareKeys, tree, path, value) =>
   switch (path) {
   | [] => raise(NotFound)
+  | [h, ...t] when isKeyInNodes(tree, h) =>
+    let node = findByKeyInNodes(tree, h);
+    replaceNodeByKey(tree, h, setOnNode(compareKeys, node, t, value));
   | [h, ...t] =>
-    if (existsOnNode(tree, h)) {
-      let node = findOnNode(tree, h);
-      replaceNode(tree, h, setOnNode(node, t, value));
-    } else {
-      let node = Node.empty(h);
-      [setOnNode(node, t, value), ...tree];
-    }
+    let node = Node.empty(h);
+    List.sort(
+      (node1, node2) => compareKeys(node1.Node.key, node2.Node.key),
+      [setOnNode(compareKeys, node, t, value), ...tree],
+    );
   };
 
-let rec unset = tree =>
-  fun
+let rec unset = (tree, path) =>
+  switch (path) {
   | [] => tree
-  | [h, ...t] when existsOnNode(tree, h) => {
-      let node = findOnNode(tree, h);
-      let children = unset(node.Node.children, t);
-      let newNode =
-        if (t == []) {
-          Node.setChildren(Node.empty(h), children);
-        } else {
-          Node.setChildren(node, children);
-        };
-
-      if (children == [] && newNode.Node.value == None) {
-        removeNode(tree, h);
+  | [h, ...t] when isKeyInNodes(tree, h) =>
+    let node = findByKeyInNodes(tree, h);
+    let children = unset(node.Node.children, t);
+    let newNode =
+      if (t == []) {
+        Node.setChildren(Node.empty(h), children);
       } else {
-        replaceNode(tree, h, newNode);
+        Node.setChildren(node, children);
       };
-    }
-  | [_, ..._] => raise(NotFound);
 
-let rec print =
-        (
-          indent: int,
-          aToString: 'a => string,
-          bToString: 'b => string,
-          tree: t('a, 'b),
-        ) => {
-  switch (tree) {
-  | [] => ()
-  | [h, ...t] =>
-    let spaces = String.make(indent, ':');
-    print_string(spaces);
-    print_string("(");
-    print_string(aToString(h.Node.key));
-    print_string(":");
-    switch (h.Node.value) {
-    | None => print_string("_")
-    | Some(value) => print_string(bToString(value))
+    if (children == [] && newNode.Node.value == None) {
+      removeNodeByKey(tree, h);
+    } else {
+      replaceNodeByKey(tree, h, newNode);
     };
-    print_string(")");
-    printEndline("->");
-    print(indent + 1, aToString, bToString, h.Node.children);
-    print(indent, aToString, bToString, t);
+  | _ => raise(NotFound)
+  };
+
+let rec combine = (compareKeys, combineValues, firstTree, secondTree) => {
+  switch (firstTree, secondTree) {
+  | ([], second) => second
+  | (first, []) => first
+  | (firstTree, [hs, ...ts]) when isKeyInNodes(firstTree, hs.Node.key) =>
+    let similarNode = findByKeyInNodes(firstTree, hs.Node.key);
+    let newValue =
+      switch (similarNode.Node.value, hs.Node.value) {
+      | (None, None) => None
+      | (None, Some(secondVal)) => Some(secondVal)
+      | (Some(firstVal), None) => Some(firstVal)
+      | (Some(firstVal), Some(secondVal)) =>
+        Some(combineValues(firstVal, secondVal))
+      };
+
+    let newNode =
+      switch (newValue) {
+      | None => Node.empty(similarNode.Node.key)
+      | Some(value) => Node.setValue(similarNode, value)
+      };
+
+    let combinedNode =
+      Node.setChildren(
+        newNode,
+        combine(
+          compareKeys,
+          combineValues,
+          similarNode.Node.children,
+          hs.Node.children,
+        ),
+      );
+
+    let combinedFirstTree =
+      List.map(
+        elem =>
+          if (elem.Node.key == combinedNode.Node.key) {
+            combinedNode;
+          } else {
+            elem;
+          },
+        firstTree,
+      );
+
+    List.sort(
+      (node1, node2) => compareKeys(node1.Node.key, node2.Node.key),
+      combine(compareKeys, combineValues, combinedFirstTree, ts),
+    );
+
+  | ([hf, ...tf], [hs, ...ts]) =>
+    List.sort(
+      (node1, node2) => compareKeys(node1.Node.key, node2.Node.key),
+      combine(compareKeys, combineValues, [hf, hs, ...tf], ts),
+    )
   };
 };

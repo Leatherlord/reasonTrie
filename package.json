@@ -1,6 +1,6 @@
 {
     "esy": {
-        "build": "dune build"
+        "build": "dune build -p reasonTrie"
     },
     "dependencies": {
         "@opam/dune": "*",

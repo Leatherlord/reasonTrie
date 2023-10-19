@@ -15,8 +15,4 @@
  (name reasonTrie)
  (synopsis "Functional Programming second assignment.")
  (description "Polymorphic Trie in ReasonML")
-<<<<<<< HEAD
- (depends ocaml dune reason ounit2))
-=======
  (depends ocaml dune reason))
->>>>>>> af9e59f (Migrate to esy)

@@ -1,3 +1,0 @@
-(test
- (name reasonEulerProjectTest)
- (libraries ounit2 reasonTrie))

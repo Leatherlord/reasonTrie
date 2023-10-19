@@ -1,13 +1,4 @@
 {
-<<<<<<< HEAD
-  "devDependencies": {
-    "husky": "8.0.3"
-  },
-  "scripts": {
-    "prepare": "husky install"
-  }
-}
-=======
     "esy": {
         "build": "dune build"
     },
@@ -17,4 +8,3 @@
         "ocaml": "4.14.1000"
     }
 }
->>>>>>> af9e59f (Migrate to esy)

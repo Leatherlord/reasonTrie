@@ -2,8 +2,4 @@
  (name reasonTrie)
  (flags
   (:standard -w +A))
-<<<<<<< HEAD
- (libraries reUtils reString reList reInt))
-=======
  (libraries reUtils reString reList))
->>>>>>> af9e59f (Migrate to esy)

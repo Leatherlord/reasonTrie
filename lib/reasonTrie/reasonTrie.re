@@ -231,3 +231,23 @@ let rec combine = (compareKeys, combineValues, firstTree, secondTree) => {
     )
   };
 };
+
+let rec filter = (filterFunction: 'b => bool, tree: t('a, 'b)) => {
+  switch (tree) {
+  | [] => []
+  | [hd, ...tl] =>
+    let children = filter(filterFunction, hd.Node.children);
+    let newNode =
+      if (hd.Node.value == None || filterFunction(Node.getValue(hd))) {
+        Node.setChildren(hd, children);
+      } else {
+        Node.setChildren(Node.empty(hd.Node.key), children);
+      };
+
+    if (children == [] && newNode.Node.value == None) {
+      filter(filterFunction, tl);
+    } else {
+      [newNode, ...filter(filterFunction, tl)];
+    };
+  };
+};

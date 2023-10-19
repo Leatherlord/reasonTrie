@@ -9,4 +9,5 @@ let set: (('a, 'a) => int, t('a, 'b), list('a), 'b) => t('a, 'b);
 let unset: (t('a, 'b), list('a)) => t('a, 'b);
 let combine:
   (('a, 'a) => int, ('b, 'b) => 'b, t('a, 'b), t('a, 'b)) => t('a, 'b);
+let filter: ('b => bool, t('a, 'b)) => t('a, 'b);
 let print: (int, 'a => string, 'b => string, t('a, 'b)) => unit;

@@ -42,8 +42,6 @@ ReasonTrie.print(
   0,
   Char.escaped,
   ReInt.toString,
-  ReasonTrie.sub(
-    newTrie,
-    List.init(String.length("He"), String.get("He")),
-  ),
+  ReasonTrie.sub(newTrie, List.init(String.length("He"), String.get("He")))
+  |> ReasonTrie.filter(Int.equal(228)),
 );

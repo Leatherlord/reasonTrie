@@ -41,7 +41,13 @@ let newTrie =
 ReasonTrie.print(
   0,
   Char.escaped,
+<<<<<<< HEAD
   ReInt.toString,
   ReasonTrie.sub(newTrie, List.init(String.length("He"), String.get("He")))
   |> ReasonTrie.filter(Int.equal(228)),
+=======
+  Int.to_string,
+  ReasonTrie.sub(newTrie, List.init(String.length("He"), String.get("He")))
+  |> ReasonTrie.filter(Int.equal(100)),
+>>>>>>> af9e59f (Migrate to esy)
 );

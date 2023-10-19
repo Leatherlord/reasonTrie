@@ -1,6 +1,10 @@
 (executable
  (public_name app)
  (name main)
+<<<<<<< HEAD
  (libraries reasonTrie reUtils reInt)
+=======
+ (libraries reasonTrie reUtils)
+>>>>>>> af9e59f (Migrate to esy)
  (flags
   (:standard -w +A)))

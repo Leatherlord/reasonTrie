@@ -1,3 +1,8 @@
 _build/
 _opam/
+<<<<<<< HEAD
 node_modules
+=======
+_esy/
+node_modules
+>>>>>>> af9e59f (Migrate to esy)

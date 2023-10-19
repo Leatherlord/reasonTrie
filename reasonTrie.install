@@ -1,0 +1,8 @@
+lib: [
+  "/home/selfofly/Documents/Functional Programming/esyBuild/_esy/default/store/b/esybuild-1d0e9785/install/default/lib/reasonTrie/META"
+  "/home/selfofly/Documents/Functional Programming/esyBuild/_esy/default/store/b/esybuild-1d0e9785/install/default/lib/reasonTrie/dune-package"
+  "/home/selfofly/Documents/Functional Programming/esyBuild/_esy/default/store/b/esybuild-1d0e9785/install/default/lib/reasonTrie/opam"
+]
+bin: [
+  "/home/selfofly/Documents/Functional Programming/esyBuild/_esy/default/store/b/esybuild-1d0e9785/install/default/bin/app"
+]

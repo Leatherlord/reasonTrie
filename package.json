@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "devDependencies": {
     "husky": "8.0.3"
   },
@@ -6,3 +7,14 @@
     "prepare": "husky install"
   }
 }
+=======
+    "esy": {
+        "build": "dune build"
+    },
+    "dependencies": {
+        "@opam/dune": "*",
+        "@opam/reason": "3.10.0",
+        "ocaml": "4.14.1000"
+    }
+}
+>>>>>>> af9e59f (Migrate to esy)

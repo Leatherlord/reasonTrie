@@ -10,7 +10,10 @@ depends: [
   "ocaml"
   "dune" {>= "3.10"}
   "reason"
+<<<<<<< HEAD
   "ounit2"
+=======
+>>>>>>> af9e59f (Migrate to esy)
   "odoc" {with-doc}
 ]
 build: [

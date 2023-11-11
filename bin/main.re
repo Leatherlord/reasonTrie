@@ -1,47 +1,39 @@
-// open ReUtils;
+module StringTrie =
+  ReasonTrie.Make({
+    type keyPath = string;
+    type keyStep = char;
+    let pathSize = String.length;
+    let getStepFromPath = String.get;
+    let compareSteps = Char.compare;
+    let getListFromPath = str =>
+      List.init(String.length(str), String.get(str));
+    let getPathFromList = lst =>
+      String.concat("", List.map(String.make(1), lst));
+  });
 
-let combineInts = (first, second) => first * second;
-
-let newTrie = ReasonTrie.create();
-
+let firstTrie = StringTrie.create();
 let str = "Hello!";
 let vl = 10;
-let lst = List.init(String.length(str), String.get(str));
 
-let newTrie = ReasonTrie.set(Char.compare, newTrie, lst, vl);
+let firstTrie = StringTrie.set(firstTrie, str, vl);
+// let firstTrie = StringTrie.set(Char.compare, firstTrie, "World!", vl);
 
-let str = "Hell";
-let vl = 100;
-let lst = List.init(String.length(str), String.get(str));
+let secondTrie = StringTrie.create();
 
-let newTrie = ReasonTrie.set(Char.compare, newTrie, lst, vl);
+let secondTrie = StringTrie.set(secondTrie, str, vl);
+let secondTrie = StringTrie.set(secondTrie, "World!", 20);
+let secondTrie = StringTrie.unset(secondTrie, "World!");
 
-let str = "Helicopter";
-let vl = 228;
-let lst = List.init(String.length(str), String.get(str));
+let thirdTrie = StringTrie.combine(Int.compare, firstTrie, secondTrie);
 
-let newTrie = ReasonTrie.set(Char.compare, newTrie, lst, vl);
+let fourthTrie = StringTrie.combine(Int.compare, secondTrie, firstTrie);
 
-let newTrie2 = ReasonTrie.create();
-let str = "SHell";
-let vl = 100;
-let lst = List.init(String.length(str), String.get(str));
-
-let newTrie2 = ReasonTrie.set(Char.compare, newTrie2, lst, vl);
-
-let str = "Helios";
-let vl = 100;
-let lst = List.init(String.length(str), String.get(str));
-
-let newTrie2 = ReasonTrie.set(Char.compare, newTrie2, lst, vl);
-
-let newTrie =
-  ReasonTrie.combine(Char.compare, combineInts, newTrie, newTrie2);
-
-ReasonTrie.print(
-  0,
-  Char.escaped,
-  Int.to_string,
-  ReasonTrie.sub(newTrie, List.init(String.length("He"), String.get("He")))
-  |> ReasonTrie.filter(Int.equal(100)),
+print_endline(
+  if (thirdTrie == fourthTrie) {
+    "Equals";
+  } else {
+    "Not equals";
+  },
 );
+
+// StringTrie.print(0, Char.escaped, Int.to_string, newTrie);

@@ -1,5 +1,5 @@
 (library
  (name reasonTrie)
  (flags
-  (:standard -w +A))
+  (:standard -w +A-70))
  (libraries reUtils reString reList))

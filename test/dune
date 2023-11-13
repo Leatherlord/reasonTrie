@@ -1,0 +1,6 @@
+(executable
+ (public_name test)
+ (name test)
+ (libraries reasonTrie reUtils ounit2)
+ (flags
+  (:standard -w +A)))

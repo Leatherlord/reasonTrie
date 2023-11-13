@@ -15,4 +15,4 @@
  (name reasonTrie)
  (synopsis "Functional Programming second assignment.")
  (description "Polymorphic Trie in ReasonML")
- (depends ocaml dune reason))
+ (depends ocaml dune reason ounit2))

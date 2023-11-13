@@ -32,11 +32,6 @@ jobs:
     steps:
       - name: Checkout tree
         uses: actions/checkout@v4
-
-    #   - name: Set-up OCaml ${{ matrix.ocaml-compiler }}
-    #     uses: ocaml/setup-ocaml@v2
-    #     with:
-    #       ocaml-compiler: ${{ matrix.ocaml-compiler }}
       
       - name: Install node
         uses: actions/setup-node@v2
@@ -50,8 +45,5 @@ jobs:
         with:
           cache-key: ${{ hashFiles('esy.lock/index.json') }}
       
-      # - run: opam install . --deps-only --with-test
-
-    #   - run: opam exec -- dune build
-
-    #   - run: opam exec -- dune runtest
+      - name: Run tests
+        run: esy x test

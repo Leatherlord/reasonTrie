@@ -24,7 +24,6 @@ module type TrieFunctor =
     let unset: (t('b), Iterable.keyPath) => t('b);
     let combine: (('b, 'b) => 'b, t('b), t('b)) => t('b);
     let filter: ('b => bool, t('b)) => t('b);
-    // let print: (int, Iterable.keyStep => string, 'b => string, t('b)) => unit;
   };
 
 module Node = {
@@ -48,31 +47,7 @@ module Make: TrieFunctor =
   (Iterable: IterablePath) => {
     type t('b) = list(Node.t(Iterable.keyStep, 'b));
     let create = () => [];
-    // let rec print =
-    //         (
-    //           indent: int,
-    //           aToString: Iterable.keyStep => string,
-    //           bToString: 'b => string,
-    //           tree: t('b),
-    //         ) => {
-    //   switch (tree) {
-    //   | [] => ()
-    //   | [h, ...t] =>
-    //     let spaces = String.make(indent, ':');
-    //     printString(spaces);
-    //     printString("(");
-    //     printString(aToString(h.Node.key));
-    //     printString(":");
-    //     switch (h.Node.value) {
-    //     | None => printString("_")
-    //     | Some(value) => printString(bToString(value))
-    //     };
-    //     printString(")");
-    //     printEndline("->");
-    //     print(indent + 1, aToString, bToString, h.Node.children);
-    //     print(indent, aToString, bToString, t);
-    //   };
-    // };
+
     let isKeyInNodes = (nodes, key) =>
       List.exists(n => n.Node.key == key, nodes);
 

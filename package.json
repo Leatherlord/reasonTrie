@@ -5,6 +5,7 @@
     "dependencies": {
         "@opam/dune": "*",
         "@opam/reason": "3.10.0",
-        "ocaml": "4.14.1000"
+        "ocaml": "4.14.1000",
+        "@opam/ounit2": "*"
     }
 }

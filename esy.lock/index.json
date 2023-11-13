@@ -1,7 +1,23 @@
 {
-  "checksum": "09ec9ddc3b09be2a59d7ff478ac91aa4",
-  "root": "esyBuild@link-dev:./package.json",
+  "checksum": "21fd0c7865929ac572d4b212ccc731df",
+  "root": "reasonTrie@link-dev:./package.json",
   "node": {
+    "reasonTrie@link-dev:./package.json": {
+      "id": "reasonTrie@link-dev:./package.json",
+      "name": "reasonTrie",
+      "version": "link-dev:./package.json",
+      "source": {
+        "type": "link-dev",
+        "path": ".",
+        "manifest": "package.json"
+      },
+      "overrides": [],
+      "dependencies": [
+        "ocaml@4.14.1000@d41d8cd9", "@opam/reason@opam:3.10.0@77493263",
+        "@opam/ounit2@opam:2.2.7@2038f4eb", "@opam/dune@opam:3.11.1@ba2e0e6a"
+      ],
+      "devDependencies": []
+    },
     "ocaml@4.14.1000@d41d8cd9": {
       "id": "ocaml@4.14.1000@d41d8cd9",
       "name": "ocaml",
@@ -14,22 +30,6 @@
       },
       "overrides": [],
       "dependencies": [],
-      "devDependencies": []
-    },
-    "esyBuild@link-dev:./package.json": {
-      "id": "esyBuild@link-dev:./package.json",
-      "name": "esyBuild",
-      "version": "link-dev:./package.json",
-      "source": {
-        "type": "link-dev",
-        "path": ".",
-        "manifest": "package.json"
-      },
-      "overrides": [],
-      "dependencies": [
-        "ocaml@4.14.1000@d41d8cd9", "@opam/reason@opam:3.10.0@77493263",
-        "@opam/dune@opam:3.11.1@ba2e0e6a"
-      ],
       "devDependencies": []
     },
     "@opam/stdlib-shims@opam:0.3.0@72c7bc98": {
@@ -81,6 +81,25 @@
       "devDependencies": [
         "ocaml@4.14.1000@d41d8cd9", "@opam/dune@opam:3.11.1@ba2e0e6a"
       ]
+    },
+    "@opam/seq@opam:base@d8d7de1d": {
+      "id": "@opam/seq@opam:base@d8d7de1d",
+      "name": "@opam/seq",
+      "version": "opam:base",
+      "source": {
+        "type": "install",
+        "source": [ "no-source:" ],
+        "opam": {
+          "name": "seq",
+          "version": "base",
+          "path": "esy.lock/opam/seq.base"
+        }
+      },
+      "overrides": [],
+      "dependencies": [
+        "ocaml@4.14.1000@d41d8cd9", "@esy-ocaml/substs@0.0.1@d41d8cd9"
+      ],
+      "devDependencies": [ "ocaml@4.14.1000@d41d8cd9" ]
     },
     "@opam/reason@opam:3.10.0@77493263": {
       "id": "@opam/reason@opam:3.10.0@77493263",
@@ -174,6 +193,35 @@
       ],
       "devDependencies": [
         "ocaml@4.14.1000@d41d8cd9", "@opam/dune@opam:3.11.1@ba2e0e6a"
+      ]
+    },
+    "@opam/ounit2@opam:2.2.7@2038f4eb": {
+      "id": "@opam/ounit2@opam:2.2.7@2038f4eb",
+      "name": "@opam/ounit2",
+      "version": "opam:2.2.7",
+      "source": {
+        "type": "install",
+        "source": [
+          "archive:https://opam.ocaml.org/cache/sha256/90/90f6e63bd1240a51d8b9b2f722059bd79ce00b5276bdd6238b8f5c613c0e7388#sha256:90f6e63bd1240a51d8b9b2f722059bd79ce00b5276bdd6238b8f5c613c0e7388",
+          "archive:https://github.com/gildor478/ounit/releases/download/v2.2.7/ounit-2.2.7.tbz#sha256:90f6e63bd1240a51d8b9b2f722059bd79ce00b5276bdd6238b8f5c613c0e7388"
+        ],
+        "opam": {
+          "name": "ounit2",
+          "version": "2.2.7",
+          "path": "esy.lock/opam/ounit2.2.2.7"
+        }
+      },
+      "overrides": [],
+      "dependencies": [
+        "ocaml@4.14.1000@d41d8cd9", "@opam/stdlib-shims@opam:0.3.0@72c7bc98",
+        "@opam/seq@opam:base@d8d7de1d", "@opam/dune@opam:3.11.1@ba2e0e6a",
+        "@opam/base-unix@opam:base@87d0b2eb",
+        "@esy-ocaml/substs@0.0.1@d41d8cd9"
+      ],
+      "devDependencies": [
+        "ocaml@4.14.1000@d41d8cd9", "@opam/stdlib-shims@opam:0.3.0@72c7bc98",
+        "@opam/seq@opam:base@d8d7de1d", "@opam/dune@opam:3.11.1@ba2e0e6a",
+        "@opam/base-unix@opam:base@87d0b2eb"
       ]
     },
     "@opam/ocamlfind@opam:1.9.6@da5169c7": {

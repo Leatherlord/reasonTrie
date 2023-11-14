@@ -49,10 +49,10 @@ module Make: TrieFunctor =
     let create = () => [];
 
     let isKeyInNodes = (nodes, key) =>
-      List.exists(n => n.Node.key == key, nodes);
+      ReList.exists(n => n.Node.key == key, nodes);
 
     let findByKeyInNodes = (nodes, key) =>
-      List.find(n => n.Node.key == key, nodes);
+      ReList.find(n => n.Node.key == key, nodes);
 
     let replaceNodeByKey = (nodes, key, node) => {
       let rec aux =
@@ -81,9 +81,9 @@ module Make: TrieFunctor =
           };
         {...node, Node.value, Node.children: map(f, node.Node.children)};
       };
-      List.filter(
+      ReList.filter(
         n => n.Node.value != None || n.Node.children != [],
-        List.map(aux, tree),
+        ReList.map(aux, tree),
       );
     };
 
@@ -197,7 +197,7 @@ module Make: TrieFunctor =
             ),
           );
         let combinedFirstTree =
-          List.map(
+          ReList.map(
             elem =>
               if (elem.Node.key == combinedNode.Node.key) {
                 combinedNode;

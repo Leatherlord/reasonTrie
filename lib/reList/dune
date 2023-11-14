@@ -1,4 +1,4 @@
 (library
  (name reList)
  (flags
-  (:standard -w +A)))
+  (:standard -w +A-70)))

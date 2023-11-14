@@ -30,12 +30,12 @@ let rec reverseAppend = (first, second) =>
 let reverse = lst => reverseAppend(lst, []);
 
 let filter = check => {
-  let rec find = acc =>
+  let rec collect = acc =>
     fun
     | [] => reverse(acc)
-    | [hd, ...tl] when check(hd) => find([hd, ...acc], tl)
-    | [_, ...tl] => find(acc, tl);
-  find([]);
+    | [hd, ...tl] when check(hd) => collect([hd, ...acc], tl)
+    | [_, ...tl] => collect(acc, tl);
+  collect([]);
 };
 
 let rec map = f =>

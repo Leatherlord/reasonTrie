@@ -1,0 +1,100 @@
+module StringTrie =
+  ReasonTrie.Make({
+    type keyPath = string;
+    type keyStep = char;
+    let pathSize = String.length;
+    let getStepFromPath = String.get;
+    let compareSteps = Char.compare;
+    let getListFromPath = str =>
+      List.init(String.length(str), String.get(str));
+    let getPathFromList = lst =>
+      String.concat("", List.map(String.make(1), lst));
+  });
+
+let listForTrieGenerator =
+  ReQCheck.(
+    listOfSize(
+      ReGen.intRange(0, 100),
+      QCheck.pair(stringOfSize(ReGen.intRange(10, 20)), smallNat),
+    )
+  );
+
+let monoidTest =
+  QCheck.Test.make(
+    ~count=1000,
+    ~name="Trie is monoid",
+    QCheck.(pair(listForTrieGenerator, listForTrieGenerator)),
+    pair =>
+    switch (pair) {
+    | (first, second) =>
+      let rec aux = (tree, lst) =>
+        switch (lst) {
+        | [] => tree
+        | [hd, ...tl] =>
+          switch (hd) {
+          | (key, value) => StringTrie.set(tree, key, value) |> aux(_, tl)
+          }
+        };
+      let firstTrie = first |> aux(StringTrie.create());
+      let secondTrie = second |> aux(StringTrie.create());
+      let neutralTrie = StringTrie.create();
+
+      StringTrie.combine(Int.max, firstTrie, secondTrie)
+      == StringTrie.combine(Int.max, secondTrie, firstTrie)
+      && StringTrie.combine(Int.max, firstTrie, neutralTrie)
+      == StringTrie.combine(Int.max, neutralTrie, firstTrie)
+      && StringTrie.combine(Int.max, firstTrie, neutralTrie) == firstTrie;
+    }
+  );
+
+let setFindTest =
+  QCheck.Test.make(
+    ~count=1000,
+    ~name="Set is setting and Find is finding",
+    listForTrieGenerator,
+    genList => {
+      let rec aux = (tree, lst) =>
+        switch (lst) {
+        | [] => true
+        | [hd, ...tl] =>
+          switch (hd) {
+          | (key, value) =>
+            let newTree = StringTrie.set(tree, key, value);
+            switch (StringTrie.find(newTree, key) == value) {
+            | false => false
+            | true => aux(newTree, tl)
+            };
+          }
+        };
+      genList |> aux(StringTrie.create());
+    },
+  );
+
+let foldTest =
+  QCheck.Test.make(
+    ~count=1000,
+    ~name="Fold result is correct",
+    listForTrieGenerator,
+    genList => {
+      let rec aux = (tree, lst, acc) =>
+        switch (lst) {
+        | [] => (tree, acc)
+        | [hd, ...tl] =>
+          switch (hd) {
+          | (key, value) =>
+            StringTrie.set(tree, key, value) |> aux(_, tl, acc + value)
+          }
+        };
+
+      let foldFunction = (_, value, acc) =>
+        switch (value) {
+        | None => acc
+        | Some(value) => acc + value
+        };
+
+      let (tree, sum) = genList |> aux(StringTrie.create(), _, 0);
+      sum == StringTrie.fold(foldFunction, tree, 0);
+    },
+  );
+
+QCheck_runner.run_tests([monoidTest, setFindTest, foldTest]);

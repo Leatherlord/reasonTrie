@@ -1,0 +1,6 @@
+(executable
+ (public_name pbTest)
+ (name pbTest)
+ (libraries reasonTrie reUtils ounit2 qcheck reQCheck)
+ (flags
+  (:standard -w +A)))

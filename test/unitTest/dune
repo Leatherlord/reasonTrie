@@ -1,6 +1,6 @@
 (executable
- (public_name test)
- (name test)
+ (public_name unitTest)
+ (name unitTest)
  (libraries reasonTrie reUtils ounit2)
  (flags
   (:standard -w +A)))

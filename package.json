@@ -1,11 +1,10 @@
 {
-    "esy": {
-        "build": "dune build -p reasonTrie"
-    },
-    "dependencies": {
-        "@opam/dune": "*",
-        "@opam/reason": "3.10.0",
-        "ocaml": "4.14.1000",
-        "@opam/ounit2": "*"
-    }
+  "esy": { "build": "dune build -p reasonTrie" },
+  "dependencies": {
+    "@opam/dune": "*",
+    "@opam/ounit2": "*",
+    "@opam/qcheck": "0.21.2",
+    "@opam/reason": "3.10.0",
+    "ocaml": "4.14.1000"
+  }
 }

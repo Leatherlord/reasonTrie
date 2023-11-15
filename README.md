@@ -138,10 +138,12 @@ let monoidTest =
   QCheck.Test.make(
     ~count=1000,
     ~name="Trie is monoid",
-    QCheck.(pair(listForTrieGenerator, listForTrieGenerator)),
-    pair =>
-    switch (pair) {
-    | (first, second) =>
+    QCheck.(
+      tup3(listForTrieGenerator, listForTrieGenerator, listForTrieGenerator)
+    ),
+    triplet =>
+    switch (triplet) {
+    | (first, second, third) =>
       let rec aux = (tree, lst) =>
         switch (lst) {
         | [] => tree
@@ -152,12 +154,23 @@ let monoidTest =
         };
       let firstTrie = first |> aux(StringTrie.create());
       let secondTrie = second |> aux(StringTrie.create());
+      let thirdTrie = third |> aux(StringTrie.create());
       let neutralTrie = StringTrie.create();
 
       StringTrie.combine(Int.max, firstTrie, secondTrie)
       == StringTrie.combine(Int.max, secondTrie, firstTrie)
       && StringTrie.combine(Int.max, firstTrie, neutralTrie)
       == StringTrie.combine(Int.max, neutralTrie, firstTrie)
+      && StringTrie.combine(
+           Int.max,
+           firstTrie,
+           StringTrie.combine(Int.max, secondTrie, thirdTrie),
+         )
+      == StringTrie.combine(
+           Int.max,
+           StringTrie.combine(Int.max, firstTrie, secondTrie),
+           thirdTrie,
+         )
       && StringTrie.combine(Int.max, firstTrie, neutralTrie) == firstTrie;
     }
   );

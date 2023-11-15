@@ -46,4 +46,4 @@ jobs:
           cache-key: ${{ hashFiles('esy.lock/index.json') }}
       
       - name: Run tests
-        run: esy x unitTest -verbose true && esy x pbTest
+        run: esy x unitTestBasic -ci true && esy x unitTestComplex -ci true && esy x pbTest

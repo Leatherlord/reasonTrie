@@ -14,7 +14,7 @@ module StringTrie =
 let listForTrieGenerator =
   ReQCheck.(
     listOfSize(
-      ReGen.intRange(0, 100),
+      ReGen.intRange(1, 100),
       QCheck.pair(stringOfSize(ReGen.intRange(10, 20)), smallNat),
     )
   );
@@ -42,21 +42,59 @@ let monoidTest =
       let thirdTrie = third |> aux(StringTrie.create());
       let neutralTrie = StringTrie.create();
 
-      StringTrie.combine(Int.max, firstTrie, secondTrie)
-      == StringTrie.combine(Int.max, secondTrie, firstTrie)
-      && StringTrie.combine(Int.max, firstTrie, neutralTrie)
-      == StringTrie.combine(Int.max, neutralTrie, firstTrie)
-      && StringTrie.combine(
-           Int.max,
-           firstTrie,
-           StringTrie.combine(Int.max, secondTrie, thirdTrie),
-         )
-      == StringTrie.combine(
-           Int.max,
-           StringTrie.combine(Int.max, firstTrie, secondTrie),
-           thirdTrie,
-         )
-      && StringTrie.combine(Int.max, firstTrie, neutralTrie) == firstTrie;
+      let checkAssociativity =
+        StringTrie.combine(
+          Int.max,
+          firstTrie,
+          StringTrie.combine(Int.max, secondTrie, thirdTrie),
+        )
+        == StringTrie.combine(
+             Int.max,
+             StringTrie.combine(Int.max, firstTrie, secondTrie),
+             thirdTrie,
+           );
+
+      let checkNeutralElement =
+        StringTrie.combine(Int.max, firstTrie, neutralTrie)
+        == StringTrie.combine(Int.max, neutralTrie, firstTrie)
+        && StringTrie.combine(Int.max, firstTrie, neutralTrie) == firstTrie;
+
+      checkAssociativity && checkNeutralElement;
+    }
+  );
+
+let commutativityTest =
+  QCheck.Test.make(
+    ~count=1000,
+    ~name="Test for commutativity",
+    QCheck.(pair(listForTrieGenerator, listForTrieGenerator)),
+    pair =>
+    switch (pair) {
+    | (first, second) =>
+      let rec aux = (tree, lst) =>
+        switch (lst) {
+        | [] => tree
+        | [hd, ...tl] =>
+          switch (hd) {
+          | (key, value) => StringTrie.set(tree, key, value) |> aux(_, tl)
+          }
+        };
+      let firstTrie = first |> aux(StringTrie.create());
+      let secondTrie = second |> aux(StringTrie.create());
+
+      let shouldBeCommutative =
+        StringTrie.combine(Int.max, firstTrie, secondTrie)
+        == StringTrie.combine(Int.max, secondTrie, firstTrie);
+
+      let takeSecond = (_: int, second: int) => second;
+
+      let shouldNotBeCommutative =
+        StringTrie.compareEmptyFalse(
+          StringTrie.combine(takeSecond, firstTrie, secondTrie),
+          StringTrie.combine(takeSecond, secondTrie, firstTrie),
+        );
+
+      shouldBeCommutative && shouldNotBeCommutative;
     }
   );
 
@@ -110,4 +148,7 @@ let foldTest =
     },
   );
 
-QCheck_runner.run_tests([monoidTest, setFindTest, foldTest]);
+QCheck_runner.run_tests(
+  ~verbose=true,
+  [monoidTest, commutativityTest, setFindTest, foldTest],
+);

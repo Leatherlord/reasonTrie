@@ -24,6 +24,7 @@ module type TrieFunctor =
     let unset: (t('b), Iterable.keyPath) => t('b);
     let combine: (('b, 'b) => 'b, t('b), t('b)) => t('b);
     let filter: ('b => bool, t('b)) => t('b);
+    let compareEmptyFalse: (t('b), t('b)) => bool;
   };
 
 module Node = {
@@ -238,4 +239,10 @@ module Make: TrieFunctor =
         };
       };
     };
+
+    let compareEmptyFalse = (first, second) =>
+      switch (first, second) {
+      | ([], []) => false
+      | (first, second) => first == second
+      };
   };

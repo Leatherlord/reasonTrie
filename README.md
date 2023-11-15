@@ -157,21 +157,24 @@ let monoidTest =
       let thirdTrie = third |> aux(StringTrie.create());
       let neutralTrie = StringTrie.create();
 
-      StringTrie.combine(Int.max, firstTrie, secondTrie)
-      == StringTrie.combine(Int.max, secondTrie, firstTrie)
-      && StringTrie.combine(Int.max, firstTrie, neutralTrie)
-      == StringTrie.combine(Int.max, neutralTrie, firstTrie)
-      && StringTrie.combine(
-           Int.max,
-           firstTrie,
-           StringTrie.combine(Int.max, secondTrie, thirdTrie),
-         )
-      == StringTrie.combine(
-           Int.max,
-           StringTrie.combine(Int.max, firstTrie, secondTrie),
-           thirdTrie,
-         )
-      && StringTrie.combine(Int.max, firstTrie, neutralTrie) == firstTrie;
+      let checkAssociativity =
+        StringTrie.combine(
+          Int.max,
+          firstTrie,
+          StringTrie.combine(Int.max, secondTrie, thirdTrie),
+        )
+        == StringTrie.combine(
+             Int.max,
+             StringTrie.combine(Int.max, firstTrie, secondTrie),
+             thirdTrie,
+           );
+
+      let checkNeutralElement =
+        StringTrie.combine(Int.max, firstTrie, neutralTrie)
+        == StringTrie.combine(Int.max, neutralTrie, firstTrie)
+        && StringTrie.combine(Int.max, firstTrie, neutralTrie) == firstTrie;
+
+      checkAssociativity && checkNeutralElement;
     }
   );
 ```
